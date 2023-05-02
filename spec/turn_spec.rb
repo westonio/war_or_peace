@@ -81,4 +81,25 @@ RSpec.describe Turn do
         expect(turn.winner).to eq("No Winner")
     end
 
+    it "adds cards to spoils_of_war or discards based off type" do
+        player1 = Player.new("Michael",b_deck1)
+        player2 = Player.new("McKayla",b_deck2)
+        turn = Turn.new(player1, player2)
+        expect(turn.type).to eq(:basic)
+        turn.pile_cards
+        expect(turn.spoils_of_war).to eq([card1,card4])
+        expect(player1.deck.cards).to eq([card2,card3])
+
+        player3 = Player.new("Michael",w_deck1)
+        player4 = Player.new("McKayla",w_deck2)
+        turn = Turn.new(player3, player4)
+        turn.pile_cards
+        expect(turn.spoils_of_war).to eq([card1,card2,card3,card6,card5,card4])
+
+        player5 = Player.new("Michael",m_deck1)
+        player6 = Player.new("McKayla",m_deck2)
+        turn = Turn.new(player5, player6)
+        turn.pile_cards
+        expect(turn.spoils_of_war).to eq([])
+    end
 end
