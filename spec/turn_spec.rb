@@ -2,7 +2,7 @@ require 'rspec'
 require './lib/deck'
 require './lib/card'
 require './lib/player'
-require './lib/turn.rb'
+require './lib/turn'
 
 RSpec.describe Turn do
 # Test Cards
@@ -81,6 +81,7 @@ RSpec.describe Turn do
         expect(turn.winner).to eq("No Winner")
     end
 
+    
     it "adds cards to spoils_of_war or discards based off type" do
         player1 = Player.new("Michael",b_deck1)
         player2 = Player.new("McKayla",b_deck2)
@@ -102,4 +103,21 @@ RSpec.describe Turn do
         turn.pile_cards
         expect(turn.spoils_of_war).to eq([])
     end
+
+
+    it "awards spoils to the end of winner's deck" do
+        deck1 = Deck.new([card1,card2,card3])
+        deck2 = Deck.new([card4,card5,card6])
+        player1 = Player.new("Michelle",deck1)
+        player2 = Player.new("Marissa",deck2)
+        turn = Turn.new(player1, player2)
+    
+        expect(turn.winner).to eq(player2)
+        
+        turn.pile_cards
+        winner = turn.winner
+        turn.award_spoils(winner)
+        expect(winner.deck.cards).to eq([card5,card6,card1,card4])
+    end
+
 end
